@@ -34,6 +34,8 @@
         state=0;
       path.style.fill=states[state].color;
       Puck.write(states[state].command);
+     //update puck to computers time
+      Puck.setTime(optional_callback);
     });
   </script>
 </body>
