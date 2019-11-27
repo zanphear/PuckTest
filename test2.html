@@ -19,21 +19,24 @@
     var path = document.getElementsByTagName('path')[0];
     // Make sure your mouse cursor turns into a hand when over it, and gray it out
     path.style="cursor:pointer;fill:#BBB";
-
-    function getLightValue() {
-      Puck.eval("Puck.light()", function(v) {
-        path.style.fill="rgb("+Math.round(v*255)+",0,0)";
-        setTimeout(function() {
-          getLightValue();
-        }, 250);
-      });
-    }
-
-    // When clicked, start trying to get the light value
+    // the possible states we could be in
+    var state = 0;
+    var states = [
+      { color : "#444", command : "digitalWrite([LED3,LED2,LED1],0);\n" },
+      { color : "red", command : "digitalWrite([LED3,LED2,LED1],1);\n" },
+      { color : "green", command : "digitalWrite([LED3,LED2,LED1],2);\n" },
+      { color : "blue", command : "digitalWrite([LED3,LED2,LED1],4);\n" },
+    ];
+    // Now send commands to turn the LED on or off
     path.addEventListener("click", function() {
-      getLightValue();
-     
+      state++;
+      if (state>=states.length)
+        state=0;
+      path.style.fill=states[state].color;
+      Puck.write(states[state].command);
+     //update puck to computers time
+      Puck.setTime(optional_callback);
     });
   </script>
- </body>
+</body>
 </html>
